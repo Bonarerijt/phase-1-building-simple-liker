@@ -23,3 +23,41 @@ function mimicServerCall(url="http://mimicServer.example.com", config={}) {
     }, 300);
   });
 }
+
+// Your JavaScript code goes here!
+
+// Grab the error modal
+const errorModal = document.getElementById("modal");
+// Make sure modal is hidden on load
+errorModal.classList.add("hidden");
+
+// Grab all the like-glyph (heart) elements
+const likeHearts = document.querySelectorAll(".like-glyph");
+
+// Add event listeners to each heart
+likeHearts.forEach(heart => {
+  heart.addEventListener("click", () => {
+    mimicServerCall()
+      .then(() => {
+        // Success case
+        if (heart.textContent === EMPTY_HEART) {
+          heart.textContent = FULL_HEART;
+          heart.classList.add("activated-heart");
+        } else {
+          heart.textContent = EMPTY_HEART;
+          heart.classList.remove("activated-heart");
+        }
+      })
+      .catch(error => {
+        // Failure case
+        errorModal.classList.remove("hidden");
+        errorModal.querySelector("p").textContent = error;
+
+        // Hide the modal after 3 seconds
+        setTimeout(() => {
+          errorModal.classList.add("hidden");
+        }, 3000);
+      });
+  });
+});
+
